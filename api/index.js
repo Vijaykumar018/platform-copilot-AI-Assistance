@@ -2,12 +2,20 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import Groq from 'groq-sdk';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../')));
+
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
@@ -206,6 +214,11 @@ Topic: ${category}`;
   }
 });
 
+// Fallback to serve index.html for any other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../index.html'));
+});
+
 const PORT = process.env.PORT || 3000;
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
@@ -213,4 +226,4 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-export default app;
+export default app;
