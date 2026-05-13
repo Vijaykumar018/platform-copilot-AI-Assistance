@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launching Copilot...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0a0f0f;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Animated Circuit Background */
+        .circuit-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+        }
+
+        .circuit-line {
+            position: absolute;
+            background: #00897b;
+            animation: drawLine 2s ease-out infinite;
+        }
+
+        @keyframes drawLine {
+            0% {
+                transform: scaleX(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scaleX(1);
+                opacity: 0;
+            }
+        }
+
+        .loading-container {
+            text-align: center;
+            z-index: 2;
+            animation: fadeInScale 0.5s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Animated Logo */
+        .logo-3d {
+            perspective: 500px;
+            margin-bottom: 30px;
+        }
+
+        .logo-cube {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 2s ease-in-out infinite;
+        }
+
+        @keyframes rotateCube {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+            25% {
+                transform: rotateX(10deg) rotateY(10deg);
+            }
+            75% {
+                transform: rotateX(-10deg) rotateY(-10deg);
+            }
+            100% {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #00695c, #00897b);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 105, 92, 0.3);
+        }
+
+        .cube-face i {
+            font-size: 45px;
+            color: white;
+        }
+
+        .cube-front {
+            transform: translateZ(50px);
+        }
+
+        /* Loading Ring */
+        .loading-ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 40px auto;
+        }
+
+        .ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-radius: 50%;
+        }
+
+        .ring-1 {
+            border-top-color: #00897b;
+            animation: spin 1s linear infinite;
+        }
+
+        .ring-2 {
+            border-right-color: #00695c;
+            animation: spin 1.5s linear reverse infinite;
+        }
+
+        .ring-3 {
+            border-bottom-color: #4db6ac;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        .progress-bar-container {
+            height: 4px;
+            background: rgba(0, 137, 123, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00695c, #00897b, #4db6ac);
+            border-radius: 4px;
+            transition: width 0.1s linear;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -2px;
+            width: 6px;
+            height: 8px;
+            background: #4db6ac;
+            border-radius: 2px;
+            animation: pulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .loading-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .status-text {
+            font-size: 0.85rem;
+            color: #b2dfdb;
+            font-weight: 500;
+        }
+
+        .percentage {
+            font-size: 0.85rem;
+            color: #00897b;
+            font-weight: 600;
+        }
+
+        /* Loading Dots */
+        .dots {
+            display: inline-flex;
+            gap: 4px;
+            margin-left: 5px;
+        }
+
+        .dot {
+            width: 4px;
+            height: 4px;
+            background: #00897b;
+            border-radius: 50%;
+            animation: bounce 1.4s ease-in-out infinite;
+        }
+
+        .dot:nth-child(1) { animation-delay: 0s; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 137, 123, 0.3);
+            padding: 10px 24px;
+            border-radius: 40px;
+            cursor: pointer;
+            color: #b2dfdb;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-5px);
+            border-color: #00897b;
+        }
+
+        @media (max-width: 768px) {
+            .progress-section {
+                width: 260px;
+            }
+            
+            .back-btn {
+                top: 20px;
+                left: 20px;
+                padding: 8px 18px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-arrow-left"></i> Back
+    </button>
+
+    <div class="loading-container">
+        <div class="logo-3d">
+            <div class="logo-cube">
+                <div class="cube-face cube-front">
+                    <i class="fas fa-robot"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading-ring">
+            <div class="ring ring-1"></div>
+            <div class="ring ring-2"></div>
+            <div class="ring ring-3"></div>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-bar-container">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="loading-status">
+                <span class="status-text" id="statusText">Initializing AI <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></span>
+                <span class="percentage" id="percentage">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let progress = 0;
+        const progressFill = document.getElementById('progressFill');
+        const percentageEl = document.getElementById('percentage');
+        const statusText = document.getElementById('statusText');
+        
+        const statusMessages = [
+            "Initializing AI",
+            "Loading Neural Networks",
+            "Calibrating Responses",
+            "Connecting to Server",
+            "Preparing Interface",
+            "Almost Ready",
+            "Launching Copilot"
+        ];
+        
+        let msgIndex = 0;
+        
+        const interval = setInterval(() => {
+            progress += Math.random() * 10 + 3;
+            
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                progressFill.style.width = '100%';
+                percentageEl.textContent = '100%';
+                statusText.innerHTML = 'Ready to Launch! <i class="fas fa-check-circle" style="color:#4caf50; margin-left:5px;"></i>';
+                
+                setTimeout(() => {
+                    window.location.href = 'main.html';
+                }, 600);
+            } else {
+                progressFill.style.width = progress + '%';
+                percentageEl.textContent = Math.floor(progress) + '%';
+                
+                // Update status message every 14%
+                if (progress >= (msgIndex + 1) * 14 && msgIndex < statusMessages.length - 1) {
+                    msgIndex++;
+                    statusText.innerHTML = statusMessages[msgIndex] + ' <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>';
+                }
+            }
+        }, 100);
+        
+        // Fallback redirect
+        setTimeout(() => {
+            if (progress < 100) {
+                clearInterval(interval);
+                window.location.href = 'main.html';
+            }
+        }, 2800);
+    </script>
+</body>
+</html>
