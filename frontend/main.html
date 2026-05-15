@@ -114,13 +114,20 @@
         }
 
         .nav-section label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #10b981; /* Vibrant Green */
             text-transform: uppercase;
             margin-bottom: 12px;
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
         }
+
+        .nav-section:nth-child(1) label { color: #0D9488; } /* Teal */
+        .nav-section:nth-child(2) label { color: #10b981; } /* Green */
+        .nav-section:nth-child(3) label { color: #8b5cf6; } /* Purple */
 
         .custom-select {
             width: 100%;
@@ -364,21 +371,21 @@
             <div class="logo-box"><i class="fas fa-brain fa-lg"></i></div>
             <div class="logo-text">
                 <h1>Platform Copilot</h1>
-                <p>Advanced AI Assistant</p>
+                <p>Your AI-powered guided assistant</p>
             </div>
         </div>
         
         <div class="sidebar-nav">
             <div class="nav-section">
-                <label>Target Persona</label>
-                <select id="intentSelect" class="custom-select">
+                <label><i class="fas fa-user-tie"></i> SELECT YOUR ROLE</label>
+                <select id="intentSelect" class="custom-select" style="border-left: 4px solid var(--accent);">
                     <option value="">Select Role...</option>
                 </select>
             </div>
             
             <div id="categorySection" class="nav-section" style="display:none;">
-                <label>Action Category</label>
-                <select id="categorySelect" class="custom-select">
+                <label><i class="fas fa-list"></i> SELECT TOPIC</label>
+                <select id="categorySelect" class="custom-select" style="border-left: 4px solid #10b981;">
                     <option value="">Select Topic...</option>
                 </select>
             </div>
