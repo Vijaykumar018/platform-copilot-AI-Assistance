@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Platform Copilot</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -14,7 +15,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: url('copilot_login_bg_1778860460464.png') no-repeat center center fixed;
+            background: #0f172a; /* Dark fallback */
+            background: url('copilot_login_bg_1778860460464.png'), radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0f172a 100%);
             background-size: cover;
             font-family: 'Outfit', sans-serif;
             overflow: hidden;
@@ -49,7 +51,7 @@
         }
 
         .subtitle {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 14px;
             margin-bottom: 32px;
         }
@@ -61,10 +63,11 @@
 
         .input-group label {
             display: block;
-            color: rgba(255, 255, 255, 0.8);
+            color: #cbd5e1;
             font-size: 14px;
             margin-bottom: 8px;
             margin-left: 4px;
+            font-weight: 500;
         }
 
         .input-group input {
@@ -134,16 +137,21 @@
 
         .social-btn {
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             color: white;
             font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: background 0.3s ease;
+            gap: 12px;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .social-btn i {
+            font-size: 18px;
         }
 
         .social-btn:hover {
@@ -170,12 +178,12 @@
         </form>
 
         <div class="social-login">
-            <button class="social-btn">
-                <img src="https://www.svgrepo.com/show/355037/google.svg" width="18" alt="Google">
+            <button class="social-btn" type="button" onclick="alert('Google Auth will be active in the production environment.')">
+                <i class="fab fa-google" style="color: #ea4335;"></i>
                 Google
             </button>
-            <button class="social-btn">
-                <img src="https://www.svgrepo.com/show/447194/github-fill.svg" width="18" alt="GitHub">
+            <button class="social-btn" type="button" onclick="alert('GitHub Auth will be active in the production environment.')">
+                <i class="fab fa-github"></i>
                 GitHub
             </button>
         </div>
