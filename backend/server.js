@@ -159,6 +159,7 @@ IMPORTANT: Your response will be rendered in a professional "Workspace" view.
 Use Markdown extensively:
 - Use # for the main title (e.g., # Student Study Plan)
 - Use tables for structured data like Fees, Schedules, or Comparison lists.
+- Use **INR (₹)** for all fees and monetary values (DO NOT use dollars $).
 - Use **Bold** for emphasis.
 - Use lists for steps.
 - Include HELPFUL LINKS.
