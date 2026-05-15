@@ -6,11 +6,12 @@ A professional, full-stack AI-powered assistant designed to support students, HR
 [https://platform-copilot-ai-assistance-u79o.vercel.app/](https://platform-copilot-ai-assistance-u79o.vercel.app/)
 
 ## ✨ Key Features
-- **Role-Based Assistance**: Tailored responses for Students, HR, Referrers, and Administration.
+- **2026 AI Workspace**: A professional split-screen interface for real-time document generation.
+- **PDF Export Engine**: Download AI-generated plans, reports, and resumes as professional PDFs.
+- **Neural Design System**: Apple-style glassmorphism with animated gradients and micro-interactions.
+- **Rich Markdown Support**: High-fidelity rendering of tables, code blocks, and structured reports.
+- **Interactive Role Discovery**: Specialized assistants for Students, HR, Referrers, and Administration.
 - **Lightning Fast AI**: Powered by Groq's high-performance Llama 3.1 8B model.
-- **Structured Responses**: Professional formatting with headers, bullet points, and helpful links.
-- **Responsive UI**: Sleek dark-mode interface designed for all devices.
-- **Interactive Follow-ups**: AI-generated smart questions to keep the conversation going.
 
 ## 🛠️ Tech Stack
 - **Frontend**: HTML5, Vanilla CSS3, JavaScript (ES6+)

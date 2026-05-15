@@ -155,26 +155,13 @@ app.post('/api/chat', async (req, res) => {
     
     const structuredPrompt = `${intentConfig.systemPrompt} 
 
-IMPORTANT: You can include HELPFUL LINKS in your responses when relevant. 
-For example:
-- "Check this resource: https://example.com"
-- "More information available at: https://example.com"
-- "You can find templates here: https://example.com"
-
-FORMAT:
-📌 Overview
-[2-3 sentences introducing the topic]
-
-🔹 Key Points
-• Specific point 1 with details
-• Specific point 2 with details
-
-📋 Important Details
-• Include specific numbers, dates, requirements
-• Add relevant links when helpful
-
-✅ Summary
-[Brief conclusion]
+IMPORTANT: Your response will be rendered in a professional "Workspace" view.
+Use Markdown extensively:
+- Use # for the main title (e.g., # Student Study Plan)
+- Use tables for structured data like Fees, Schedules, or Comparison lists.
+- Use **Bold** for emphasis.
+- Use lists for steps.
+- Include HELPFUL LINKS.
 
 Topic: ${category}`;
     
