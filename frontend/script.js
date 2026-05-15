@@ -108,7 +108,7 @@ async function sendMessage() {
         thinkingBox.style.display = 'none';
         
         if (data.response) {
-            addTypewriterMessage('bot', data.response);
+            addMessage('bot', data.response);
             updateWorkspace(data.response);
             conversationHistory.push({ role: 'user', content: text }, { role: 'assistant', content: data.response });
         }
@@ -129,33 +129,6 @@ function addMessage(sender, content) {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-// Typewriter Effect for Engagement
-function addTypewriterMessage(sender, content) {
-    const div = document.createElement('div');
-    div.className = `message ${sender}`;
-    div.innerHTML = `
-        <div class="avatar"><i class="fas fa-${sender === 'bot' ? 'robot' : 'user'}"></i></div>
-        <div class="bubble"></div>
-    `;
-    messagesContainer.appendChild(div);
-    
-    const bubble = div.querySelector('.bubble');
-    let i = 0;
-    const speed = 10; // Fast but visible
-
-    function type() {
-        if (i < content.length) {
-            bubble.innerHTML = marked.parse(content.substring(0, i + 1));
-            i++;
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            setTimeout(type, speed);
-        } else {
-            bubble.innerHTML = marked.parse(content);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-    }
-    type();
-}
 
 function updateWorkspace(content) {
     const titleMatch = content.match(/^# (.*)/m) || content.match(/^📌 (.*)/m);
