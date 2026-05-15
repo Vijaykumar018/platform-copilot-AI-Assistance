@@ -14,12 +14,75 @@ const thinkingBox = document.getElementById('thinkingBox');
 const wsContent = document.getElementById('wsContent');
 const wsTitle = document.getElementById('wsTitle');
 const wsMeta = document.getElementById('wsMeta');
+const voiceInputBtn = document.getElementById('voiceInputBtn');
+const autoSpeakCheckbox = document.getElementById('autoSpeak');
+
+// Voice State
+let isListening = false;
+let recognition = null;
+let synth = window.speechSynthesis;
+let isSpeaking = false;
 
 // Markdown Configuration
 marked.setOptions({
     breaks: true,
     gfm: true,
     headerIds: false
+});
+
+// ============ VOICE ASSISTANT LOGIC ============
+
+function initSpeechRecognition() {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        console.warn('Speech recognition not supported');
+        return;
+    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+        isListening = true;
+        voiceInputBtn.style.color = '#ef4444';
+        voiceInputBtn.innerHTML = '<i class="fas fa-stop-circle"></i>';
+    };
+
+    recognition.onend = () => {
+        isListening = false;
+        voiceInputBtn.style.color = 'var(--text-dim)';
+        voiceInputBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        if (transcript) {
+            userInput.value = transcript;
+            sendMessage();
+        }
+    };
+}
+
+function speakText(text) {
+    if (!synth || !autoSpeakCheckbox.checked) return;
+    if (isSpeaking) synth.cancel();
+
+    // Clean text for speech
+    const cleanText = text.replace(/[#*`]/g, '').trim();
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.onstart = () => isSpeaking = true;
+    utterance.onend = () => isSpeaking = false;
+    synth.speak(utterance);
+}
+
+voiceInputBtn.addEventListener('click', () => {
+    if (!recognition) initSpeechRecognition();
+    if (isListening) {
+        recognition.stop();
+    } else {
+        recognition.start();
+    }
 });
 
 // ============ CORE FUNCTIONS ============
@@ -110,6 +173,7 @@ async function sendMessage() {
         if (data.response) {
             addMessage('bot', data.response);
             updateWorkspace(data.response);
+            speakText(data.response); // Voice response
             conversationHistory.push({ role: 'user', content: text }, { role: 'assistant', content: data.response });
         }
     } catch (error) {
@@ -129,7 +193,6 @@ function addMessage(sender, content) {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-
 function updateWorkspace(content) {
     const titleMatch = content.match(/^# (.*)/m) || content.match(/^📌 (.*)/m);
     wsTitle.textContent = titleMatch ? titleMatch[1] : (currentCategory || "Active Report");
@@ -148,7 +211,6 @@ document.getElementById('sendBtn').addEventListener('click', sendMessage);
 userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
 document.getElementById('downloadPDF').addEventListener('click', () => {
-    // Celebrate!
     confetti({
         particleCount: 150,
         spread: 70,
