@@ -52,7 +52,6 @@ document.getElementById('intentSelect').addEventListener('change', async (e) => 
         return;
     }
 
-    // Update Role Icon
     const icons = { student: 'fa-user-graduate', hr: 'fa-briefcase', referrer: 'fa-handshake', college: 'fa-university' };
     roleIcon.innerHTML = `<i class="fas ${icons[currentIntent] || 'fa-robot'}"></i>`;
 
@@ -109,7 +108,7 @@ async function sendMessage() {
         thinkingBox.style.display = 'none';
         
         if (data.response) {
-            addMessage('bot', data.response);
+            addTypewriterMessage('bot', data.response);
             updateWorkspace(data.response);
             conversationHistory.push({ role: 'user', content: text }, { role: 'assistant', content: data.response });
         }
@@ -130,24 +129,43 @@ function addMessage(sender, content) {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-function updateWorkspace(content) {
-    // Extract a title if present (e.g., from a header)
-    const titleMatch = content.match(/^# (.*)/m) || content.match(/^📌 (.*)/m);
-    if (titleMatch) {
-        wsTitle.textContent = titleMatch[1];
-    } else {
-        wsTitle.textContent = currentCategory || "Active Report";
-    }
-
-    wsMeta.textContent = `Generated on ${new Date().toLocaleDateString()} for ${currentIntent} Persona`;
+// Typewriter Effect for Engagement
+function addTypewriterMessage(sender, content) {
+    const div = document.createElement('div');
+    div.className = `message ${sender}`;
+    div.innerHTML = `
+        <div class="avatar"><i class="fas fa-${sender === 'bot' ? 'robot' : 'user'}"></i></div>
+        <div class="bubble"></div>
+    `;
+    messagesContainer.appendChild(div);
     
-    // Render the markdown in the workspace
+    const bubble = div.querySelector('.bubble');
+    let i = 0;
+    const speed = 10; // Fast but visible
+
+    function type() {
+        if (i < content.length) {
+            bubble.innerHTML = marked.parse(content.substring(0, i + 1));
+            i++;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            setTimeout(type, speed);
+        } else {
+            bubble.innerHTML = marked.parse(content);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    }
+    type();
+}
+
+function updateWorkspace(content) {
+    const titleMatch = content.match(/^# (.*)/m) || content.match(/^📌 (.*)/m);
+    wsTitle.textContent = titleMatch ? titleMatch[1] : (currentCategory || "Active Report");
+    wsMeta.textContent = `Generated on ${new Date().toLocaleDateString()} for ${currentIntent} Persona`;
     wsContent.innerHTML = marked.parse(content);
     
-    // Add glassmorphic entrance animation
     const card = document.getElementById('documentCard');
     card.style.animation = 'none';
-    card.offsetHeight; // trigger reflow
+    card.offsetHeight;
     card.style.animation = 'msgIn 0.8s ease-out';
 }
 
@@ -157,9 +175,17 @@ document.getElementById('sendBtn').addEventListener('click', sendMessage);
 userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
 document.getElementById('downloadPDF').addEventListener('click', () => {
+    // Celebrate!
+    confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#0D9488', '#10b981', '#ffffff']
+    });
+
     const element = document.getElementById('documentCard');
     const opt = {
-        margin: 10,
+        margin: 5,
         filename: `Copilot_Report_${Date.now()}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, backgroundColor: '#1e293b' },
@@ -174,5 +200,4 @@ document.getElementById('clearChat').addEventListener('click', () => {
     wsContent.innerHTML = '<p style="color: var(--text-dim); text-align: center; margin-top: 100px;">Workspace Cleared.</p>';
 });
 
-// Initialize
 loadIntents();
